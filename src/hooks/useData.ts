@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export type Options = {
   adultNum?: number;
@@ -8,22 +8,19 @@ export type Options = {
   maxDistance?: number;
 };
 
-export type RoomInfo = {
+// これの項目　明日の朝確認
+export type Plan = {
   name: string;
+  hotelName: string;
+  roomName: string;
+  distance: number;
   reserveURL: string;
   charge: number;
-  planName: string;
-};
-
-export type Hotel = {
-  name: string;
-  distance: number;
-  roomInfos: RoomInfo[];
 };
 
 export const useData = () => {
   const [loading, setLoading] = useState(false);
-  const [hotels, setHotels] = useState([] as Hotel[]);
+  const [plans, setPlans] = useState([] as Plan[]);
   const [latitude, setLatitude] = useState(0.0);
   const [longitude, setLongitude] = useState(0.0);
   const [options, setOptions] = useState({
@@ -49,17 +46,21 @@ export const useData = () => {
         'https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=2022-08-29&checkoutDate=2022-08-30&datumType=1&latitude=35.233549392171&longitude=139.1035099094733&adultNum=2&applicationId=1001591218102377156'
       )
       .then((res) => {
-        setHotels(
-          res.data.hotels.map((hotel: any) => ({
-            name: hotel.hotel[0].hotelBasicInfo.hotelName,
-            distance: 0.2,
-            roomInfos: hotel.hotel.slice(1).map((roomInfo: any) => ({
-              name: roomInfo.roomInfo[0].roomBasicInfo.roomName,
-              reserveURL: roomInfo.roomInfo[0].roomBasicInfo.reserveUrl,
-              planName: roomInfo.roomInfo[0].roomBasicInfo.planName,
-              charge: roomInfo.roomInfo[1].dailyCharge.rakutenCharge,
-            })),
-          }))
+        // ここにロジックが入る
+
+        setPlans(
+          res.data.hotels
+            .map((hotel: any) =>
+              hotel.hotel.slice(1).map((roomInfo: any) => ({
+                name: roomInfo.roomInfo[0].roomBasicInfo.planName,
+                hotelName: hotel.hotel[0].hotelBasicInfo.hotelName,
+                roomName: roomInfo.roomInfo[0].roomBasicInfo.roomName,
+                distance: 0.2,
+                reserveURL: roomInfo.roomInfo[0].roomBasicInfo.reserveUrl,
+                charge: roomInfo.roomInfo[1].dailyCharge.total,
+              }))
+            )
+            .flat()
         );
         setLoading(false);
       });
@@ -69,5 +70,5 @@ export const useData = () => {
     setOptions((prev) => ({ ...prev, ...newOptions }));
   }, []);
 
-  return { fetchData, setConfig, hotels, fetchCurrentLocation, latitude, longitude };
+  return { fetchData, setConfig, plans, fetchCurrentLocation, latitude, longitude, loading };
 };

@@ -5,7 +5,7 @@ import { useData } from './hooks/useData';
 
 const App = () => {
   const [count, setCount] = useState(0);
-  const {fetchData, setConfig, hotels, fetchCurrentLocation, latitude, longitude} = useData();
+  const {fetchData, setConfig, plans, fetchCurrentLocation, latitude, longitude} = useData();
 
   useEffect(fetchData, []);
   useEffect(fetchCurrentLocation, []);
@@ -34,7 +34,18 @@ const App = () => {
         <p>
         longitude: {longitude}
         </p>
-        {hotels.map((hotel) => <><p>ホテル名：{hotel.name}</p><p>距離：{hotel.distance}km</p>{hotel.roomInfos.map((roomInfo) => <><p>{roomInfo.name}, {roomInfo.planName}: {roomInfo.charge}円</p></>)}<br></br></>)}
+        {plans.map((plan) => (
+        <>
+        <p>プラン名：{plan.name}</p>
+        <p>ホテル名：{plan.hotelName}</p>
+        <p>部屋名：{plan.roomName}</p>
+        <p>距離：{plan.distance}km</p>
+        <p>料金：{plan.charge}円</p>
+        <p>URL：{plan.reserveURL}</p>
+        <br></br>
+        </>
+        )
+        )}
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
     </div>
