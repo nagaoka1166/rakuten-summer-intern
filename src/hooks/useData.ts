@@ -1,21 +1,21 @@
 import axios from 'axios';
 import { useCallback, useMemo, useState } from 'react';
 
-type Options = {
+export type Options = {
   adultNum?: number;
   minCharge?: number;
   maxCharge?: number;
   maxDistance?: number;
 };
 
-type RoomInfo = {
+export type RoomInfo = {
   name: string;
   reserveURL: string;
   charge: number;
   planName: string;
 };
 
-type Hotel = {
+export type Hotel = {
   name: string;
   distance: number;
   roomInfos: RoomInfo[];
