@@ -34,6 +34,7 @@ const App = () => {
         <p>
         longitude: {longitude}
         </p>
+        {hotels.map((hotel) => <><p>ホテル名：{hotel.name}</p><p>距離：{hotel.distance}km</p>{hotel.roomInfos.map((roomInfo) => <><p>{roomInfo.name}, {roomInfo.planName}: {roomInfo.charge}円</p></>)}<br></br></>)}
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
     </div>

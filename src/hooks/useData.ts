@@ -11,15 +11,14 @@ type Options = {
 type RoomInfo = {
   name: string;
   reserveURL: string;
+  charge: number;
+  planName: string;
 };
 
 type Hotel = {
   name: string;
   distance: number;
-  vacantRoomNumber: number;
   roomInfos: RoomInfo[];
-  lowestCharge: number;
-  highestCharge: number;
 };
 
 export const useData = () => {
@@ -50,8 +49,18 @@ export const useData = () => {
         'https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=2022-08-29&checkoutDate=2022-08-30&datumType=1&latitude=35.233549392171&longitude=139.1035099094733&adultNum=2&applicationId=1001591218102377156'
       )
       .then((res) => {
-        console.log(res);
-        setHotels([]);
+        setHotels(
+          res.data.hotels.map((hotel: any) => ({
+            name: hotel.hotel[0].hotelBasicInfo.hotelName,
+            distance: 0.2,
+            roomInfos: hotel.hotel.slice(1).map((roomInfo: any) => ({
+              name: roomInfo.roomInfo[0].roomBasicInfo.roomName,
+              reserveURL: roomInfo.roomInfo[0].roomBasicInfo.reserveUrl,
+              planName: roomInfo.roomInfo[0].roomBasicInfo.planName,
+              charge: roomInfo.roomInfo[1].dailyCharge.rakutenCharge,
+            })),
+          }))
+        );
         setLoading(false);
       });
   }, []);
