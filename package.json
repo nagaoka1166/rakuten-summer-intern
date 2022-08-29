@@ -11,6 +11,10 @@
     "format": "eslint --cache --fix \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.3",
     "axios": "^0.27.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "react": "^18.2.0",
