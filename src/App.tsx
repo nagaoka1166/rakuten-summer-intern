@@ -1,9 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
+import axios from "axios";
 
 const App = () => {
   const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if(loading) return;
+
+    setLoading(true);
+    axios.get('https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=2022-08-29&checkoutDate=2022-08-30&datumType=1&latitude=35.233549392171&longitude=139.1035099094733&adultNum=2&applicationId=1001591218102377156')
+  .then(res => {
+    console.log(res);
+    setLoading(false);
+  })}, []);
 
   return (
     <div className="App">
