@@ -43,9 +43,6 @@ const SearchResultPage: React.FC = () => {
   };
 
 
-  console.log(plans);
-  if(!plans.length) return null;
-
   return (
     <div>
       <Card>
@@ -57,7 +54,7 @@ const SearchResultPage: React.FC = () => {
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {plans[0].hotelName}
+              ホテル名
             </Typography>
             <Typography gutterBottom variant="h6" component="div">
               価格
