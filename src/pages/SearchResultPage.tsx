@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -32,7 +32,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 const SearchResultPage: React.FC = () => {
   const [count, setCount] = useState(0);
-  const { fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude } = useData();
+  const { plans } = useData();
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -40,31 +40,31 @@ const SearchResultPage: React.FC = () => {
     setExpanded(!expanded);
   };
 
-  if (plans.length === 0) {
+  if (plans.length === 0 || plans.length <= count) {
     return null;
   }
 
   return (
     <div>
       <Card>
-        <CardMedia component="img" height="140" image={plans[0].thumbnailURL} alt="ホテル画像" />
+        <CardMedia component="img" height="140" image={plans[count].thumbnailURL} alt="ホテル画像" />
         <CardContent>
           <Typography variant="h6" component="div">
-            {plans[0].hotelName}
+            {plans[count].hotelName}
           </Typography>
           <br />
           <Typography variant="h6" component="div">
-            {plans[0].name}
+            {plans[count].name}
           </Typography>
           <br />
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {plans[0].roomName}
+            {plans[count].roomName}
           </Typography>
           <br />
-          <Typography variant="body2">{plans[0].charge} 円</Typography>
+          <Typography variant="body2">{plans[count].charge} 円</Typography>
           <br />
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {plans[0].distance} km
+            {plans[count].distance} km
           </Typography>
           <br />
           <IconButton aria-label="delete">
@@ -81,14 +81,20 @@ const SearchResultPage: React.FC = () => {
         </Collapse>
       </Card>
       <Box sx={{ '& > :not(style)': { m: 1 } }}>
-        <Fab color="secondary" aria-label="close">
+        <Fab
+          color="secondary"
+          aria-label="close"
+          onClick={() => {
+            setCount((prev) => prev + 1);
+          }}
+        >
           <CloseIcon />
         </Fab>
         <Fab
           color="error"
           aria-label="check"
           onClick={() => {
-            document.location.href = plans[0].reserveURL;
+            document.location.href = plans[count].reserveURL;
           }}
         >
           <CheckIcon />
