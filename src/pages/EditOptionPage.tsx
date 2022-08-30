@@ -5,9 +5,6 @@ const EditOptionPage: React.FC = () => {
   const [count, setCount] = useState(0);
   const {fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude} = useData();
 
-  //useEffect(fetchData, []);
-  
-
   return (
     <div className="App">
       <div>

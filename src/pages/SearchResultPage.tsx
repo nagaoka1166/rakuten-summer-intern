@@ -6,9 +6,7 @@ const SearchResultPage: React.FC = () => {
   const {fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude} = useData();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //useEffect(fetchData, []);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(fetchCurrentLocation, []);
+  useEffect(fetchData, []);
 
   return (
     <div className="App">
