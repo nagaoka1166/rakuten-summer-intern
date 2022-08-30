@@ -75,9 +75,9 @@ export const useData = () => {
       });
   }, [loading]);
 
-  const setConfig = useCallback((newOptions: Options) => {
+  const setOption = useCallback((newOptions: Options) => {
     setOptions((prev) => ({ ...prev, ...newOptions }));
   }, []);
 
-  return { fetchData, setConfig, plans, fetchCurrentLocation, latitude, longitude, loading };
+  return { fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude, loading };
 };
