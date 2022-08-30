@@ -8,7 +8,7 @@ const App = () => {
   const [editOption, setEditOption] = useState(false);
 
   return <div>
-    <Header />
+    <Header setEditOption={setEditOption}/>
     {editOption ? <EditOptionPage /> : <SearchResultPage />}
   </div>
 };
