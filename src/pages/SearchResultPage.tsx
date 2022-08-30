@@ -87,7 +87,6 @@ const SearchResultPage: React.FC = () => {
       </Collapse>
 
       </Card>
-      </Container>
       <Box sx={{ '& > :not(style)': { m: 1 } }}>
         <Fab color="secondary" aria-label="close">
           <CloseIcon />
