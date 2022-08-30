@@ -46,30 +46,30 @@ const SearchResultPage: React.FC = () => {
 
   return (
     <div>
-      <Card>
-        <CardMedia component="img" height="140" image={plans[count].thumbnailURL} alt="ホテル画像" />
+      <Card sx={{ m: 4 }}>
+        <CardMedia component="img" height="200" image={plans[count].thumbnailURL} alt="ホテル画像" />
         <CardContent>
           <Typography variant="h6" component="div">
             {plans[count].hotelName}
           </Typography>
           <br />
-          <Typography variant="h6" component="div">
+          <Typography variant="body2" component="div">
             {plans[count].name}
           </Typography>
           <br />
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
             {plans[count].roomName}
           </Typography>
           <br />
-          <Typography variant="body2">{plans[count].charge} 円</Typography>
-          <br />
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {plans[count].distance} km
-          </Typography>
-          <br />
-          <IconButton aria-label="delete">
-            <LocationOnIcon />
-          </IconButton>
+          <Box sx={{ flexDirection: 'row' }}>
+            <Typography variant="body2">{plans[count].charge} 円</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {plans[count].distance} km
+            </Typography>
+            <IconButton aria-label="delete">
+              <LocationOnIcon />
+            </IconButton>
+          </Box>
           <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
             <ExpandMoreIcon />
           </ExpandMore>
@@ -80,7 +80,18 @@ const SearchResultPage: React.FC = () => {
           </CardContent>
         </Collapse>
       </Card>
-      <Box sx={{ '& > :not(style)': { m: 1 } }}>
+      <Box
+        sx={{ '& > :not(style)': { m: 1 } }}
+        style={{
+          margin: 0,
+          top: 'auto',
+          bottom: 20,
+          position: 'fixed',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-around',
+        }}
+      >
         <Fab
           color="secondary"
           aria-label="close"
