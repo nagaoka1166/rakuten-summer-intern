@@ -43,7 +43,7 @@ const SearchResultPage: React.FC = () => {
     setExpanded(!expanded);
   };
 
-  if (! plans.length){
+  if (plans.length === 0){
     return null
   }
 
