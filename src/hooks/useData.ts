@@ -95,14 +95,22 @@ export const useData = () => {
   }, [latitude, longitude]);
 
   const setOption = useCallback((newOptions: Options) => {
-    var setjson = JSON.stringify(options)
-    localStorage.setItem('options', setjson)
+    if(newOptions?.adultNum) localStorage.setItem('adultNum', newOptions.adultNum.toString());
+    if(newOptions?.minCharge) localStorage.setItem('minCharge', newOptions.minCharge.toString());
+    if(newOptions?.maxCharge) localStorage.setItem('maxCharge', newOptions.maxCharge.toString());
+    if(newOptions?.maxDistance) localStorage.setItem('maxDistance', newOptions.maxDistance.toString());
     setOptions((prev) => ({ ...prev, ...newOptions }));
   }, [options]);
+
   useEffect(() =>{
-    var getjson = localStorage.getItem('options')
-    const options = JSON.parse(getjson)
-  }, [options])
+    const newOptions: Options = {
+      adultNum: Number(localStorage.getItem('adultNum')) ?? undefined,
+      minCharge: Number(localStorage.getItem('minCharge')) ?? undefined,
+      maxCharge: Number(localStorage.getItem('maxCharge')) ?? undefined,
+      maxDistance: Number(localStorage.getItem('maxDistance')) ?? undefined,
+    };
+    setOptions((prev) => ({ ...prev, ...newOptions}))
+  }, []);
 
   return { fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude, loading };
 };
