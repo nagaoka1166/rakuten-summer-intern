@@ -67,27 +67,24 @@ export const useData = () => {
           res.data.hotels
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .map((hotel: any) => ({
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-                name: hotel.hotel[1].roomInfo[0].roomBasicInfo.planName,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                hotelName: hotel.hotel[0].hotelBasicInfo.hotelName,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                roomName: hotel.hotel[1].roomInfo[0].roomBasicInfo.roomName,
-                distance: 0.2,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                reserveURL: hotel.hotel[1].roomInfo[0].roomBasicInfo.reserveUrl,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                charge: hotel.hotel[1].roomInfo[1].dailyCharge.total,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                thumnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
-              })
-            )
-            .flat()
-            
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+              name: hotel.hotel[1].roomInfo[0].roomBasicInfo.planName,
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+              hotelName: hotel.hotel[0].hotelBasicInfo.hotelName,
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+              roomName: hotel.hotel[1].roomInfo[0].roomBasicInfo.roomName,
+              distance: 0.2,
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+              reserveURL: hotel.hotel[1].roomInfo[0].roomBasicInfo.reserveUrl,
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+              charge: hotel.hotel[1].roomInfo[1].dailyCharge.total,
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+              thumbnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
+            }))
         );
         setLoading(false);
       });
-  }, [latitude, loading, longitude]);
+  }, [latitude, loading, longitude, options]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(fetchCurrentLocation, []);
