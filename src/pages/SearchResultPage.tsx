@@ -42,6 +42,10 @@ const SearchResultPage: React.FC = () => {
     setExpanded(!expanded);
   };
 
+
+  console.log(plans);
+  if(!plans.length) return null;
+
   return (
     <div>
       <Card>
@@ -53,7 +57,7 @@ const SearchResultPage: React.FC = () => {
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              ホテル名
+              {plans[0].hotelName}
             </Typography>
             <Typography gutterBottom variant="h6" component="div">
               価格
