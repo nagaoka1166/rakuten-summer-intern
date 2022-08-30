@@ -1,50 +1,100 @@
 import React, { useEffect, useState } from "react"
+import { styled } from '@mui/material/styles';
 import { useData } from "../hooks/useData";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import Collapse from '@mui/material/Collapse';
+
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 const SearchResultPage: React.FC = () => {
   const [count, setCount] = useState(0);
   const {fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude} = useData();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
   useEffect(fetchData, []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(fetchCurrentLocation, []);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((prev) => prev + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-        <p>
-        latitude: {latitude}
-        </p>
-        <p>
-        longitude: {longitude}
-        </p>
-        {plans.map((plan) => (
-        <>
-        <p>プラン名：{plan.name}</p>
-        <p>ホテル名：{plan.hotelName}</p>
-        <p>部屋名：{plan.roomName}</p>
-        <p>距離：{plan.distance}km</p>
-        <p>料金：{plan.charge}円</p>
-        <p>URL：{plan.reserveURL}</p>
-        <br />
-        </>
-        )
-        )}
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+    <div>
+      <Card>
+          <CardMedia
+            component="img"
+            height="140"
+            image="/static/images/cards/contemplative-reptile.jpg"
+            alt="ホテル画像"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              ホテル名
+            </Typography>
+            <Typography gutterBottom variant="h6" component="div">
+              価格
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              空室
+            </Typography>
+            <Typography variant="body3" color="text.secondary">
+              現在地から m
+            </Typography>
+            <IconButton aria-label="delete">
+              <LocationOnIcon />
+            </IconButton>
+            <ExpandMore
+              expand={expanded}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardContent>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography paragraph>説明</Typography>
+        </CardContent>
+      </Collapse>
+
+      </Card>
+      <Box sx={{ '& > :not(style)': { m: 1 } }}>
+        <Fab color="secondary" aria-label="close">
+          <CloseIcon />
+        </Fab>
+        <Fab color="error" aria-label="check">
+          <CheckIcon />
+        </Fab>
+      </Box>
     </div>
   );
 }
