@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import { styled } from '@mui/material/styles';
-import { useData } from "../hooks/useData";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -16,6 +15,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Collapse from '@mui/material/Collapse';
+import { useData } from "../hooks/useData";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -41,8 +41,6 @@ const SearchResultPage: React.FC = () => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  useEffect(fetchData, []);
 
   return (
     <div>
