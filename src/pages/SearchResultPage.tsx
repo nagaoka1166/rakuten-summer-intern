@@ -3,7 +3,7 @@ import { useData } from "../hooks/useData";
 
 const SearchResultPage: React.FC = () => {
   const [count, setCount] = useState(0);
-  const {fetchData, setConfig, plans, fetchCurrentLocation, latitude, longitude} = useData();
+  const {fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude} = useData();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(fetchData, []);
