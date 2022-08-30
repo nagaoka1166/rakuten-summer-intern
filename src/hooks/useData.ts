@@ -89,10 +89,12 @@ export const useData = () => {
       });
   }, [latitude, loading, longitude]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(fetchCurrentLocation, []);
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [latitude, longitude]);
 
   const setOption = useCallback((newOptions: Options) => {
