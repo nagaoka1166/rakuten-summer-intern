@@ -47,8 +47,7 @@ const SearchResultPage: React.FC = () => {
   useEffect(fetchCurrentLocation, []);
 
   return (
-    <div　style={{height : "100vh"}}>
-      <Container maxWidth="sm">
+    <div>
       <Card>
           <CardMedia
             component="img"
