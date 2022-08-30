@@ -45,8 +45,6 @@ export const useData = () => {
     });
   }, [setLatitude, setLongitude]);
 
-
-  
   useEffect(fetchCurrentLocation, [])
   const fetchData = useCallback(() => {
     var date = new Date()
@@ -57,7 +55,6 @@ export const useData = () => {
     if (latitude===0 || longitude===0) return;
     setLoading(true);
     //alert(`https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=2&applicationId=1001591218102377156`)
-
 
 
     // eslint-disable-next-line no-void
