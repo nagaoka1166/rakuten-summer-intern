@@ -98,8 +98,14 @@ export const useData = () => {
   }, [latitude, longitude]);
 
   const setOption = useCallback((newOptions: Options) => {
+    var setjson = JSON.stringify(options)
+    localStorage.setItem('options', setjson)
     setOptions((prev) => ({ ...prev, ...newOptions }));
-  }, []);
+  }, [options]);
+  useEffect(() =>{
+    var getjson = localStorage.getItem('options')
+    const options = JSON.parse(getjson)
+  }, [options])
 
   return { fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude, loading };
 };
