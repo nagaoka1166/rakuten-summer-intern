@@ -8,8 +8,9 @@ const App = () => {
   const [editOption, setEditOption] = useState(false);
 
   return <div>
-    <Header />
+    <Header></Header>
     {editOption ? <EditOptionPage /> : <SearchResultPage />}
+    <div>footer</div>
   </div>
 };
 
