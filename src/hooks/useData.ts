@@ -80,7 +80,7 @@ export const useData = () => {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
                 charge: roomInfo.roomInfo[1].dailyCharge.total,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                thumnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
+                thumbnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
               }))
             )
             .flat()

@@ -16,6 +16,7 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Collapse from '@mui/material/Collapse';
 import { useData } from "../hooks/useData";
+import { QueuePlayNextSharp } from "@mui/icons-material";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -42,6 +43,9 @@ const SearchResultPage: React.FC = () => {
     setExpanded(!expanded);
   };
 
+  if (! plans.length){
+    return null
+  }
 
   return (
     <div>
@@ -49,31 +53,34 @@ const SearchResultPage: React.FC = () => {
           <CardMedia
             component="img"
             height="140"
-            image="/static/images/cards/contemplative-reptile.jpg"
+            image={plans[0].thumbnailURL}
             alt="ホテル画像"
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              ホテル名
+            <Typography variant="h6" component="div">
+              {plans[0].hotelName}
             </Typography>
-            <Typography gutterBottom variant="h6" component="div">
-              価格
+            <br />
+            <Typography variant="h8" component="div">
+              {plans[0].name}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              空室
+            <br />
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              {plans[0].roomName}
             </Typography>
-            <Typography variant="body3" color="text.secondary">
-              現在地から m
+            <br />
+            <Typography variant="body2">
+              {plans[0].charge} 円
             </Typography>
+            <br />
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              {plans[0].distance} km
+            </Typography>
+            <br />
             <IconButton aria-label="delete">
-              <LocationOnIcon />
+            <LocationOnIcon />
             </IconButton>
-            <ExpandMore
-              expand={expanded}
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
+            <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
               <ExpandMoreIcon />
             </ExpandMore>
           </CardContent>
