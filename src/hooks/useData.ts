@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export type Options = {
   adultNum?: number;
@@ -16,9 +16,11 @@ export type Plan = {
   distance: number;
   reserveURL: string;
   charge: number;
+  thumbnailURL: string;
 };
 
 export const useData = () => {
+
   const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState([] as Plan[]);
   const [latitude, setLatitude] = useState(0.0);
@@ -30,21 +32,36 @@ export const useData = () => {
     maxDistance: 2,
   } as Options);
 
+  useEffect(() => {
+    fetchData()
+  },
+  [latitude, longitude]
+  )
+  
   const fetchCurrentLocation = useCallback(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       setLatitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
+      setLongitude(position.coords.longitude);      
     });
   }, [setLatitude, setLongitude]);
 
+  useEffect(fetchCurrentLocation, [])
   const fetchData = useCallback(() => {
+    var date = new Date()
+    var checkinDate = String(date.getFullYear()) + '-' + String(date.getMonth()+1).padStart(2, '0')  + '-' + String(date.getDate()).padStart(2, '0')
+    date.setDate(date.getDate() + 1)
+    var checkoutDate = String(date.getFullYear())  + '-' +  String(date.getMonth()+1).padStart(2, '0')  + '-' +  String(date.getDate()).padStart(2, '0')
     if (loading) return;
-
+    if (latitude===0 || longitude===0) return;
     setLoading(true);
+    //alert(`https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=2&applicationId=1001591218102377156`)
+
+
     // eslint-disable-next-line no-void
     void axios
       .get(
-        'https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=2022-09-01&checkoutDate=2022-09-02&datumType=1&latitude=35.233549392171&longitude=139.1035099094733&adultNum=2&applicationId=1001591218102377156'
+        //`https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${date1}&checkoutDate=${date2}&datumType=1&latitude=35.233549392171&longitude=139.1035099094733&adultNum=2&applicationId=1001591218102377156`
+        `https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=2&applicationId=1001591218102377156`
       )
       .then((res) => {
         // ここにロジックが入る
@@ -67,6 +84,8 @@ export const useData = () => {
                 reserveURL: roomInfo.roomInfo[0].roomBasicInfo.reserveUrl,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
                 charge: roomInfo.roomInfo[1].dailyCharge.total,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+                thumnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
               }))
             )
             .flat()

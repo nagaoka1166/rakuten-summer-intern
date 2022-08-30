@@ -3,10 +3,7 @@ import { useData } from "../hooks/useData";
 
 const EditOptionPage: React.FC = () => {
   const [count, setCount] = useState(0);
-  const {fetchData, setConfig, plans, fetchCurrentLocation, latitude, longitude} = useData();
-
-  useEffect(fetchData, []);
-  useEffect(fetchCurrentLocation, []);
+  const {fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude} = useData();
 
   return (
     <div className="App">
