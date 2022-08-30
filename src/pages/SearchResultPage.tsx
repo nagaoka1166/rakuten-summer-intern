@@ -4,7 +4,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import CheckIcon from '@mui/icons-material/Check';
@@ -12,11 +11,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
 import Collapse from '@mui/material/Collapse';
 import { useData } from "../hooks/useData";
-import { QueuePlayNextSharp } from "@mui/icons-material";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -61,7 +57,7 @@ const SearchResultPage: React.FC = () => {
               {plans[0].hotelName}
             </Typography>
             <br />
-            <Typography variant="h8" component="div">
+            <Typography variant="h6" component="div">
               {plans[0].name}
             </Typography>
             <br />
