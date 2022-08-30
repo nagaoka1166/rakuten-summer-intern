@@ -56,7 +56,8 @@ export const useData = () => {
     void axios
       .get(
         // `https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${date1}&checkoutDate=${date2}&datumType=1&latitude=35.233549392171&longitude=139.1035099094733&adultNum=2&applicationId=1001591218102377156`
-        `https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=2&applicationId=1001591218102377156`
+        // `https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=2&applicationId=1001591218102377156`
+        `https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=${options.adultNum}&maxCharge=${options.maxCharge}%minCharge=${options.minCharge}&searchRadius=${options.maxDistance}&applicationId=1001591218102377156`
       )
       .then((res) => {
         // ここにロジックが入る
@@ -65,25 +66,24 @@ export const useData = () => {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
           res.data.hotels
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .map((hotel: any) =>
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
-              hotel.hotel.slice(1).map((roomInfo: any) => ({
+            .map((hotel: any) => ({
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-                name: roomInfo.roomInfo[0].roomBasicInfo.planName,
+                name: hotel.hotel[1].roomInfo[0].roomBasicInfo.planName,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
                 hotelName: hotel.hotel[0].hotelBasicInfo.hotelName,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                roomName: roomInfo.roomInfo[0].roomBasicInfo.roomName,
+                roomName: hotel.hotel[1].roomInfo[0].roomBasicInfo.roomName,
                 distance: 0.2,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                reserveURL: roomInfo.roomInfo[0].roomBasicInfo.reserveUrl,
+                reserveURL: hotel.hotel[1].roomInfo[0].roomBasicInfo.reserveUrl,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                charge: roomInfo.roomInfo[1].dailyCharge.total,
+                charge: hotel.hotel[1].roomInfo[1].dailyCharge.total,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
                 thumbnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
               }))
             )
             .flat()
+            
         );
         setLoading(false);
       });
