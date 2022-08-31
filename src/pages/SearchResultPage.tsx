@@ -62,17 +62,19 @@ const SearchResultPage: React.FC = () => {
           </Typography>
           <br />
           <Box sx={{ flexDirection: 'row' }}>
-            <Typography variant="body2">{plans[count].charge} 円</Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography display="inline" variant="h6">
+              {plans[count].charge} 円
+            </Typography>
+            <Typography sx={{ mx: 2 }} display="inline" variant="h6" color="text.secondary">
               {plans[count].distance} km
             </Typography>
             <IconButton aria-label="delete">
               <LocationOnIcon />
             </IconButton>
+            <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
+              <ExpandMoreIcon />
+            </ExpandMore>
           </Box>
-          <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
-            <ExpandMoreIcon />
-          </ExpandMore>
         </CardContent>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
@@ -90,6 +92,7 @@ const SearchResultPage: React.FC = () => {
           width: '100%',
           display: 'flex',
           justifyContent: 'space-around',
+          maxWidth: 600,
         }}
       >
         <Fab
