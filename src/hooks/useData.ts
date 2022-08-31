@@ -103,7 +103,7 @@ export const useData = () => {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
                 charge: hotel.hotel[1].roomInfo[1].dailyCharge.total,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-                thumbnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
+                thumbnailURL: hotel.hotel[0].hotelBasicInfo.hotelImageUrl,
               };
             })
         );
