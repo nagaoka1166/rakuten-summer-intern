@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -9,27 +8,9 @@ import Fab from '@mui/material/Fab';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import Collapse from '@mui/material/Collapse';
-import { CircularProgress } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import { CircularProgress, Slide } from '@mui/material';
 import { useData } from '../hooks/useData';
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 type Props = {
   editOption: boolean;
@@ -38,12 +19,7 @@ type Props = {
 const SearchResultPage: React.FC<Props> = ({ editOption }) => {
   const [count, setCount] = useState(0);
   const { plans, loading } = useData();
-
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const containerRef = React.useRef(null);
 
   useEffect(() => {
     if (editOption) setCount(0);
@@ -88,43 +64,49 @@ const SearchResultPage: React.FC<Props> = ({ editOption }) => {
   }
 
   return (
-    <div>
-      <Card sx={{ m: 4 }}>
-        <CardMedia component="img" height="200" image={plans[count].thumbnailURL} alt="ホテル画像" />
-        <CardContent>
-          <Typography variant="h6" component="div">
-            {plans[count].hotelName}
-          </Typography>
-          <br />
-          <Typography variant="body2" component="div">
-            {plans[count].name}
-          </Typography>
-          <br />
-          <Typography variant="body2" color="text.secondary" gutterBottom>
-            {plans[count].roomName}
-          </Typography>
-          <br />
-          <Box sx={{ flexDirection: 'row' }}>
-            <Typography display="inline" variant="h6">
-              {plans[count].charge} 円
-            </Typography>
-            <Typography sx={{ mx: 2 }} display="inline" variant="h6" color="text.secondary">
-              {plans[count].distance} km
-            </Typography>
-            <IconButton aria-label="delete">
-              <LocationOnIcon />
-            </IconButton>
-            <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
-              <ExpandMoreIcon />
-            </ExpandMore>
-          </Box>
-        </CardContent>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph>説明</Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
+    <div ref={containerRef}>
+      {plans.map((p, i) => {
+        const inF = i === count;
+        return (
+          <Slide
+            timeout={{ enter: 300, exit: 0 }}
+            in={inF}
+            mountOnEnter
+            unmountOnExit
+            container={containerRef.current}
+            direction="right"
+          >
+            <Card sx={{ m: 4 }}>
+              <CardMedia component="img" height="200" image={p.thumbnailURL} alt="ホテル画像" />
+              <CardContent>
+                <Typography variant="h6" component="div">
+                  {p.hotelName}
+                </Typography>
+                <br />
+                <Typography variant="body2" component="div">
+                  {p.name}
+                </Typography>
+                <br />
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  {p.roomName}
+                </Typography>
+                <br />
+                <Box sx={{ flexDirection: 'row' }}>
+                  <Typography display="inline" variant="h6">
+                    {p.charge} 円
+                  </Typography>
+                  <Typography sx={{ mx: 2 }} display="inline" variant="h6" color="text.secondary">
+                    {p.distance} km
+                  </Typography>
+                  <IconButton aria-label="delete">
+                    <LocationOnIcon />
+                  </IconButton>
+                </Box>
+              </CardContent>
+            </Card>
+          </Slide>
+        );
+      })}
       <Box
         sx={{ '& > :not(style)': { m: 1 } }}
         style={{
@@ -151,7 +133,7 @@ const SearchResultPage: React.FC<Props> = ({ editOption }) => {
           color="error"
           aria-label="check"
           onClick={() => {
-            document.location.href = plans[count].reserveURL;
+            window.open(plans[count].reserveURL, '_blank');
           }}
         >
           <CheckIcon />
