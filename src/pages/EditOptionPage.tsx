@@ -34,6 +34,7 @@ const EditOptionPage: React.FC = () => {
         <p>距離：{plan.distance}km</p>
         <p>料金：{plan.charge}円</p>
         <p>URL：{plan.reserveURL}</p>
+        <p>MAP:{plan.hotelmapURL}</p>
         <br />
         </>
         )
