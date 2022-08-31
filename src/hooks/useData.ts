@@ -35,6 +35,8 @@ export const useData = () => {
   } as Options);
 
   const fetchCurrentLocation = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log('fetch current location');
     setLoading(true);
     navigator.geolocation.getCurrentPosition((position) => {
       setLatitude(position.coords.latitude);
@@ -62,6 +64,7 @@ export const useData = () => {
     if (options.minCharge) url += `&minCharge=${options.minCharge}`;
     if (options.maxDistance) url += `&searchRadius=${options.maxDistance}`;
 
+    // eslint-disable-next-line no-console
     console.log(`fetch data: ${url}`);
 
     // eslint-disable-next-line no-void
@@ -115,14 +118,6 @@ export const useData = () => {
       });
   }, [latitude, loading, longitude, options]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(fetchCurrentLocation, []);
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [latitude, options]);
-
   const setOption = useCallback((newOptions: Options) => {
     if (newOptions?.adultNum) localStorage.setItem('adultNum', newOptions.adultNum.toString());
     if (newOptions?.minCharge) localStorage.setItem('minCharge', newOptions.minCharge.toString());
@@ -130,6 +125,14 @@ export const useData = () => {
     if (newOptions?.maxDistance) localStorage.setItem('maxDistance', newOptions.maxDistance.toString());
     setOptions((prev) => ({ ...prev, ...newOptions }));
   }, []);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(fetchCurrentLocation, []);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latitude, longitude, options]);
 
   useEffect(() => {
     const newOptions: Options = {

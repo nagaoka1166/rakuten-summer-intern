@@ -12,18 +12,14 @@ import IconButton from '@mui/material/IconButton';
 import { CircularProgress, Slide } from '@mui/material';
 import { useData } from '../hooks/useData';
 
-type Props = {
-  editOption: boolean;
-};
-
-const SearchResultPage: React.FC<Props> = ({ editOption }) => {
+const SearchResultPage: React.FC = () => {
   const [count, setCount] = useState(0);
   const { plans, loading } = useData();
   const containerRef = React.useRef(null);
 
   useEffect(() => {
-    if (editOption) setCount(0);
-  }, [editOption]);
+    if (loading) setCount(0);
+  }, [loading]);
 
   if (loading) {
     return (
@@ -75,9 +71,10 @@ const SearchResultPage: React.FC<Props> = ({ editOption }) => {
             unmountOnExit
             container={containerRef.current}
             direction="right"
+            key={JSON.stringify(p)}
           >
             <Card sx={{ m: 4 }}>
-              <CardMedia component="img" height="200" image={p.thumbnailURL} alt="ホテル画像" />
+              <CardMedia sx={{ maxHeight: '40vh' }} component="img" image={p.thumbnailURL} alt="ホテル画像" />
               <CardContent>
                 <Typography variant="h6" component="div">
                   {p.hotelName}
