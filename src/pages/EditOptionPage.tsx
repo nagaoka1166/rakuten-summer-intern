@@ -27,7 +27,9 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
   }, [options]);
 
   return (
-    <div className="App">
+    <Box
+      sx={{ my: 5, mx: 4, display: 'flex', flexDirection: 'column', justifyContent: 'space-around', height: '60vh' }}
+    >
       <div>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
@@ -76,7 +78,7 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
           </FormControl>
         </Box>
       </div>
-      <div>
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-around' }}>
         <InputLabel variant="standard" htmlFor="charge">
           金額
         </InputLabel>
@@ -166,7 +168,7 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
           検索
         </Button>
       </div>
-    </div>
+    </Box>
   );
 };
 
