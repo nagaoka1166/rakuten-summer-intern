@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
+const BASE_URL =
+  'https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&applicationId=1001591218102377156';
+
 export type Options = {
   adultNum?: number;
   minCharge?: number;
@@ -27,14 +30,16 @@ export const useData = () => {
   const [options, setOptions] = useState({
     adultNum: 1,
     minCharge: 1000,
-    maxCharge: 40000,
-    maxDistance: 2,
+    maxCharge: 10000,
+    maxDistance: 0.5,
   } as Options);
 
   const fetchCurrentLocation = useCallback(() => {
+    setLoading(true);
     navigator.geolocation.getCurrentPosition((position) => {
       setLatitude(position.coords.latitude);
       setLongitude(position.coords.longitude);
+      setLoading(false);
     });
   }, [setLatitude, setLongitude]);
 
@@ -50,15 +55,18 @@ export const useData = () => {
     if (loading) return;
     if (latitude === 0 || longitude === 0) return;
     setLoading(true);
-    // alert(`https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=2&applicationId=1001591218102377156`)
+
+    let url = `${BASE_URL}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}`;
+    if (options.adultNum) url += `&adultNum=${options.adultNum}`;
+    if (options.maxCharge) url += `&maxCharge=${options.maxCharge}`;
+    if (options.minCharge) url += `&minCharge=${options.minCharge}`;
+    if (options.maxDistance) url += `&searchRadius=${options.maxDistance}`;
+
+    console.log(`fetch data: ${url}`);
 
     // eslint-disable-next-line no-void
     void axios
-      .get(
-        // `https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${date1}&checkoutDate=${date2}&datumType=1&latitude=35.233549392171&longitude=139.1035099094733&adultNum=2&applicationId=1001591218102377156`
-         `https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=2&applicationId=1001591218102377156`
-        //`https://app.rakuten.co.jp/services/api/Travel/VacantHotelSearch/20170426?format=json&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}&datumType=1&latitude=${latitude}&longitude=${longitude}&adultNum=${options.adultNum}&maxCharge=${options.maxCharge}%minCharge=${options.minCharge}&searchRadius=${options.maxDistance}&applicationId=1001591218102377156`
-      )
+      .get(url)
       .then((res) => {
         setPlans(
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
@@ -66,32 +74,43 @@ export const useData = () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .map((hotel: any) => {
               // ロジック
-              let hotelLatitude = hotel.hotel[0].hotelBasicInfo.latitude
-              let hotelLongitude = hotel.hotel[0].hotelBasicInfo.longitude
-              
-              const R = Math.PI / 180
-              let usrLat = latitude * R
-              let usrLng = longitude * R
-              let htlLat = hotelLatitude * R
-              let htlLng = hotelLongitude * R
-              
-              let distance = 6371 * Math.acos(Math.cos(usrLat) * Math.cos(htlLat) * Math.cos(htlLng - usrLng) + Math.sin(usrLat) * Math.sin(htlLat))
-              return{
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-              name: hotel.hotel[1].roomInfo[0].roomBasicInfo.planName,
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-              hotelName: hotel.hotel[0].hotelBasicInfo.hotelName,
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-              roomName: hotel.hotel[1].roomInfo[0].roomBasicInfo.roomName,
-              distance: distance.toFixed(2).toString(),
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-              reserveURL: hotel.hotel[1].roomInfo[0].roomBasicInfo.reserveUrl,
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-              charge: hotel.hotel[1].roomInfo[1].dailyCharge.total,
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-              thumbnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
-            }})
+              const hotelLatitude = hotel.hotel[0].hotelBasicInfo.latitude;
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+              const hotelLongitude = hotel.hotel[0].hotelBasicInfo.longitude;
+
+              const R = Math.PI / 180;
+              const usrLat = latitude * R;
+              const usrLng = longitude * R;
+              const htlLat = hotelLatitude * R;
+              const htlLng = hotelLongitude * R;
+
+              const distance =
+                6371 *
+                Math.acos(
+                  Math.cos(usrLat) * Math.cos(htlLat) * Math.cos(htlLng - usrLng) + Math.sin(usrLat) * Math.sin(htlLat)
+                );
+              return {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+                name: hotel.hotel[1].roomInfo[0].roomBasicInfo.planName,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+                hotelName: hotel.hotel[0].hotelBasicInfo.hotelName,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+                roomName: hotel.hotel[1].roomInfo[0].roomBasicInfo.roomName,
+                distance: distance.toFixed(2).toString(),
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+                reserveURL: hotel.hotel[1].roomInfo[0].roomBasicInfo.reserveUrl,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+                charge: hotel.hotel[1].roomInfo[1].dailyCharge.total,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+                thumbnailURL: hotel.hotel[0].hotelBasicInfo.hotelThumbnailUrl,
+              };
+            })
         );
+        setLoading(false);
+      })
+      .catch(() => {
+        setPlans([]);
         setLoading(false);
       });
   }, [latitude, loading, longitude, options]);
@@ -102,25 +121,25 @@ export const useData = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [latitude, longitude]);
+  }, [latitude, options]);
 
   const setOption = useCallback((newOptions: Options) => {
-    if(newOptions?.adultNum) localStorage.setItem('adultNum', newOptions.adultNum.toString());
-    if(newOptions?.minCharge) localStorage.setItem('minCharge', newOptions.minCharge.toString());
-    if(newOptions?.maxCharge) localStorage.setItem('maxCharge', newOptions.maxCharge.toString());
-    if(newOptions?.maxDistance) localStorage.setItem('maxDistance', newOptions.maxDistance.toString());
+    if (newOptions?.adultNum) localStorage.setItem('adultNum', newOptions.adultNum.toString());
+    if (newOptions?.minCharge) localStorage.setItem('minCharge', newOptions.minCharge.toString());
+    if (newOptions?.maxCharge) localStorage.setItem('maxCharge', newOptions.maxCharge.toString());
+    if (newOptions?.maxDistance) localStorage.setItem('maxDistance', newOptions.maxDistance.toString());
     setOptions((prev) => ({ ...prev, ...newOptions }));
-  }, [options]);
+  }, []);
 
-  useEffect(() =>{
+  useEffect(() => {
     const newOptions: Options = {
       adultNum: Number(localStorage.getItem('adultNum')) ?? undefined,
       minCharge: Number(localStorage.getItem('minCharge')) ?? undefined,
       maxCharge: Number(localStorage.getItem('maxCharge')) ?? undefined,
       maxDistance: Number(localStorage.getItem('maxDistance')) ?? undefined,
     };
-    setOptions((prev) => ({ ...prev, ...newOptions}))
+    setOptions((prev) => ({ ...prev, ...newOptions }));
   }, []);
 
-  return { fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude, loading };
+  return { fetchData, setOption, plans, fetchCurrentLocation, latitude, longitude, loading, options };
 };

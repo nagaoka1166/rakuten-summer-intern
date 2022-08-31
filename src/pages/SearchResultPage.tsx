@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -12,6 +12,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
+import { CircularProgress } from '@mui/material';
 import { useData } from '../hooks/useData';
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -30,9 +31,13 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const SearchResultPage: React.FC = () => {
+type Props = {
+  editOption: boolean;
+};
+
+const SearchResultPage: React.FC<Props> = ({ editOption }) => {
   const [count, setCount] = useState(0);
-  const { plans } = useData();
+  const { plans, loading } = useData();
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -40,8 +45,46 @@ const SearchResultPage: React.FC = () => {
     setExpanded(!expanded);
   };
 
-  if (plans.length === 0 || plans.length <= count) {
-    return null;
+  useEffect(() => {
+    if (editOption) setCount(0);
+  }, [editOption]);
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: '100vh',
+          width: '100vw',
+          position: 'absolute',
+          left: 0,
+          top: 0,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 600,
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            margin: '0 auto',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'black',
+            opacity: 0.7,
+          }}
+        >
+          <CircularProgress />
+        </div>
+      </div>
+    );
+  }
+
+  if (plans.length === 0) {
+    return <div>候補が見つかりませんでした。再検索お願いします。</div>;
+  }
+
+  if (plans.length <= count) {
+    return <div>候補は以上です。再検索お願いします。</div>;
   }
 
   return (
