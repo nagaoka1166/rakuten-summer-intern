@@ -35,6 +35,7 @@ export const useData = () => {
   } as Options);
 
   const fetchCurrentLocation = useCallback(() => {
+    // eslint-disable-next-line no-console
     console.log('fetch current location');
     setLoading(true);
     navigator.geolocation.getCurrentPosition((position) => {
