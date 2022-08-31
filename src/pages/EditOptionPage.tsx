@@ -4,7 +4,6 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
-import { Typography } from '@mui/material';
 import { useData } from '../hooks/useData';
 
 type Props = {
@@ -27,14 +26,12 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
   }, [options]);
 
   return (
-    <Box
-      sx={{ my: 5, mx: 4, display: 'flex', flexDirection: 'column', justifyContent: 'space-around', height: '60vh' }}
-    >
-      <div>
+    <Box sx={{ my: 5, mx: 4, display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
+      <div style={{ marginTop: 30 }}>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel variant="standard" htmlFor="stayPeoples">
-              宿泊人数
+              宿泊人数 (1 ~ 99 人)
             </InputLabel>
             <Input
               type="number"
@@ -46,12 +43,11 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
           </FormControl>
         </Box>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-        <Typography>金額</Typography>
-        <Box sx={{ mx: 2 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', marginTop: 30 }}>
+        <Box sx={{ mr: 2 }}>
           <FormControl fullWidth>
             <InputLabel variant="standard" htmlFor="minCharge">
-              最低
+              最低金額
             </InputLabel>
             <Input
               type="number"
@@ -63,10 +59,10 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
           </FormControl>
         </Box>
         〜
-        <Box sx={{ mx: 2 }}>
+        <Box sx={{ ml: 2 }}>
           <FormControl fullWidth>
             <InputLabel variant="standard" htmlFor="minCharge">
-              最高
+              最高金額
             </InputLabel>
             <Input
               type="number"
@@ -78,11 +74,11 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
           </FormControl>
         </Box>
       </div>
-      <div>
+      <div style={{ marginTop: 30 }}>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel variant="standard" htmlFor="distance">
-              距離半径 (0.1 ~ 3.0km)
+              距離半径
             </InputLabel>
             <Input
               type="number"
@@ -94,7 +90,7 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
           </FormControl>
         </Box>
       </div>
-      <div>
+      <div style={{ marginTop: 30 }}>
         <Button
           variant="contained"
           onClick={() => {
@@ -104,8 +100,8 @@ const EditOptionPage: React.FC<Props> = ({ setEditOption }) => {
             const maxD = Number(distance);
             setOption({
               adultNum: adultNum < 100 && adultNum > 0 ? adultNum : undefined,
-              minCharge: minC > 1000 && minC < 1000000 ? minC : undefined,
-              maxCharge: maxC > 1000 && maxC < 1000000 ? maxC : undefined,
+              minCharge: minC >= 1000 && minC < 1000000 ? minC : undefined,
+              maxCharge: maxC >= 1000 && maxC < 1000000 ? maxC : undefined,
               maxDistance: maxD >= 0.1 && maxD <= 3 ? Math.round(maxD * 10) / 10 : undefined,
             });
             setEditOption(false);
