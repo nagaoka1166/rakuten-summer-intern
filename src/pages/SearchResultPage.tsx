@@ -95,7 +95,12 @@ const SearchResultPage: React.FC = () => {
                   <Typography sx={{ mx: 2 }} display="inline" variant="h6" color="text.secondary">
                     {p.distance} km
                   </Typography>
-                  <IconButton aria-label="delete">
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => {
+                      window.open(p.hotelmapURL, '_blank');
+                    }}
+                  >
                     <LocationOnIcon />
                   </IconButton>
                 </Box>

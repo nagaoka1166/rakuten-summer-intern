@@ -20,6 +20,7 @@ export type Plan = {
   reserveURL: string;
   charge: number;
   thumbnailURL: string;
+  hotelmapURL: string;
 };
 
 export const useData = () => {
@@ -93,6 +94,7 @@ export const useData = () => {
                 Math.acos(
                   Math.cos(usrLat) * Math.cos(htlLat) * Math.cos(htlLng - usrLng) + Math.sin(usrLat) * Math.sin(htlLat)
                 );
+
               return {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                 name: hotel.hotel[1].roomInfo[0].roomBasicInfo.planName,
@@ -107,6 +109,8 @@ export const useData = () => {
                 charge: hotel.hotel[1].roomInfo[1].dailyCharge.total,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
                 thumbnailURL: hotel.hotel[0].hotelBasicInfo.hotelImageUrl,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/restrict-template-expressions
+                hotelmapURL: `https://www.google.com/maps/search/?api=1&query=${hotel.hotel[0].hotelBasicInfo.hotelName}`,
               };
             })
         );
